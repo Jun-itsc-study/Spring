@@ -7,11 +7,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h1>테스트 페이지</h1>
-	<form action="form.do">
-		<input type="text" name="name" placeholder="이름"><br>
-		<input type="text" name="age" placeholder="나이"><br>
-		<button>전송</button>
-	</form>
+	<p>아이디 : ${requestScope.dto.id }</p>
+	<p>비번 : ${requestScope.dto.pass }</p>
+	<p>이름 : ${requestScope.dto.name }</p>
+	<p>나이 : ${requestScope.dto.age }</p>
 </body>
 </html>

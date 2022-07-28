@@ -7,11 +7,10 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h1>테스트 페이지</h1>
-	<form action="form.do">
-		<input type="text" name="name" placeholder="이름"><br>
-		<input type="text" name="age" placeholder="나이"><br>
-		<button>전송</button>
-	</form>
+<form action="login.do" method="post">
+	<input type="text" name="id" placeholder="아이디"><br>
+	<input type="password" name="pass" placeholder="비밀번호"><br>
+	<button>로그인</button>
+</form>
 </body>
 </html>

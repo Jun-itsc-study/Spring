@@ -57,6 +57,16 @@
 		position:absolute;
 		right:0px;
 	}
+	.a a:link, .a a:visited {
+		text-decoration: none;
+		color:black;	
+	}
+	.a a:hover{
+		font-weight: bold;
+	}
+	.a:hover{
+		background-color: rgb(233,233,233);
+	}
 </style>
 </head>
 <body>
@@ -76,34 +86,34 @@
 	<!-- 게시판 기능 추가 기존 게시판에 있는 내용을 el과 jstl로 표현 -->
 		<c:if test="${requestScope.list ==null}">
 			<script>
-				location.href="main.do?pageNo=1";
+				location.href="/?pageNo=1";
 				
 			</script>
 		</c:if>
 		<c:forEach var="dto" items="${requestScope.list }">
 			<tr>
 				<td>${dto.bno }</td>
-				<td><a href="boardView.do?bno=${dto.bno }"> ${dto.title }</a></td>
+				<td class="a"><a href="boardView.do?bno=${dto.bno }"> ${dto.title }</a></td>
 				<td>${dto.writer}</td>
 				<td>${dto.bDate }</td>
 				<td>${dto.bCount }</td>
 				<td>${dto.bLike }</td>
-				<td>${dto.bHate }</td>
+				<td>${dto.bDislike }</td>
 			</tr>
 		</c:forEach>
 			<tr>
 			<td colspan="7">
 					<div class="page_bar">
 						<c:if test="${pagging.previousPageGroup }">
-							<a href="main.do?pageNo=${pagging.startPageOfPageGroup - 1 }">◀</a>
+							<a href="/?pageNo=${pagging.startPageOfPageGroup - 1 }">◀</a>
 						</c:if>
 						<c:forEach var="i" begin="${pagging.startPageOfPageGroup}" 
 						end="${pagging.endPageOfPageGroup}">
-							<a href="main.do?pageNo=${i }">${ i}</a>
+							<a href="/?pageNo=${i }">${ i}</a>
 						</c:forEach>
 					
 						<c:if test="${pagging.nextPageGroup }">
-							<a href="main.do?pageNo=${pagging.endPageOfPageGroup + 1 }">▶</a>
+							<a href="/?pageNo=${pagging.endPageOfPageGroup + 1 }">▶</a>
 						</c:if>
 						<a href="boardWriteView.do" class="btn_writer">글쓰기</a>
 					</div>

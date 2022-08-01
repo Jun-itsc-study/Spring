@@ -1,6 +1,7 @@
 package com.koreait.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -41,6 +42,45 @@ public class BoardService {
 		return mapper.addBoardCount(bno);
 	}
 	
+	public int deleteBoard(int bno) {
+		return mapper.deleteBoard(bno);
+	}
+
+	public int insertComment(BoardCommentDTO dto) {
+		return mapper.insertComment(dto);
+	}
+
+	public int plusLike(Map<String, Object> map) {
+		return mapper.plusLike(map);
+	}
+	
+	public int plusDislike(Map<String, Object> map) {
+		return mapper.plusDislike(map);
+	}
+
+	public int minusLike(Map<String, Object> map) {
+		return mapper.minusLike(map);
+	}
+
+	public int minusDislike(Map<String, Object> map) {
+		return mapper.minusDislike(map);
+	}
+
+	public int boardWrite(BoardDTO dto) {
+		int bno = mapper.selectBoardNo();
+		dto.setBno(bno);
+		mapper.insertBoard(dto);
+		return bno;
+	}
+
+	public void fileUpload(FileDTO file) {
+		mapper.fileUpload(file);
+	}
+
+	public String fileDown(FileDTO dto) {
+		return mapper.fileDown(dto);
+	}
+
 	
 }
 

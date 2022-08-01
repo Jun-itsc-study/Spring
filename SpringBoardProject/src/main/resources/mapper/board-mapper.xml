@@ -17,7 +17,7 @@
 		select * from board_view where bno = #{bno}
 	</select>
 	<select id="selectCommentDTO" parameterType="int" resultType="comment">
-		select * from board_comment_view where bno = #{bno}
+		select * from comment_view where bno = #{bno}
 	</select>
 	<select id="selectFileList" parameterType="int" resultType="file">
 		select * from board_file where bno = #{bno} 
@@ -25,6 +25,38 @@
 	<update id="addBoardCount" parameterType="int">
 		update board set bcount = bcount + 1 where bno = #{bno}
 	</update>
+	<delete id="deleteBoard" parameterType="int">
+		delete from board where bno = #{bno}
+	</delete>
+	<insert id="insertComment" parameterType="comment">
+		insert into board_comment(cno, bno, writer, content) values(comment_cno.nextval, #{bno}, #{writer}, #{content})
+	</insert>
+	<insert id="plusLike">
+		insert into board_like values(#{bno}, #{id})
+	</insert>
+	<delete id="minusLike">
+		delete from board_like where bno=#{bno} and id=#{id}
+	</delete>
+	<insert id="plusDislike">
+		insert into board_dislike values(#{bno}, #{id})
+	</insert>
+	<delete id="minusDislike">
+		delete from board_dislike where bno=#{bno} and id=#{id}
+	</delete>
+	
+	<select id="selectBoardNo" resultType="int">
+		select board_bno.nextval from dual
+	</select>
+	
+	<insert id="insertBoard" parameterType="board">
+		insert into board(bno, title, writer, content) values(#{bno}, #{title},#{writer},#{content})
+	</insert>
+	<insert id="fileUpload" parameterType="file">
+		insert into board_file values(#{bno},#{fno},#{path})
+	</insert>
+	<select id="fileDown" parameterType="file" resultType="String">
+		select path from board_file where fno=#{fno} and bno=#{bno}
+	</select>
 </mapper>
 
 

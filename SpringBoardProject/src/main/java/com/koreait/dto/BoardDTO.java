@@ -11,7 +11,7 @@ public class BoardDTO {
 	private int bCount;
 	private String bDate;
 	private int bLike;
-	private int bHate;
+	private int bDislike;
 	private String content;
 	private int cCount;
 	
@@ -24,7 +24,7 @@ public class BoardDTO {
 		this.content = content;
 	}
 
-	public BoardDTO(int bno, String title, String writer, String nick, int bCount, String bDate, int bLike, int bHate,
+	public BoardDTO(int bno, String title, String writer, String nick, int bCount, String bDate, int bLike, int bDislike,
 			int cCount) {
 		super();
 		this.bno = bno;
@@ -34,11 +34,11 @@ public class BoardDTO {
 		this.bCount = bCount;
 		this.bDate = bDate;
 		this.bLike = bLike;
-		this.bHate = bHate;
+		this.bDislike = bDislike;
 		this.cCount = cCount;
 	}
 
-	public BoardDTO(int bno, String title, String writer, String nick, int bCount, String bDate, int bLike, int bHate,
+	public BoardDTO(int bno, String title, String writer, String nick, int bCount, String bDate, int bLike, int bDislike,
 			String content, int cCount) {
 		super();
 		this.bno = bno;
@@ -48,7 +48,7 @@ public class BoardDTO {
 		this.bCount = bCount;
 		this.bDate = bDate;
 		this.bLike = bLike;
-		this.bHate = bHate;
+		this.bDislike = bDislike;
 		this.content = content;
 		this.cCount = cCount;
 	}
@@ -109,12 +109,12 @@ public class BoardDTO {
 		this.bLike = bLike;
 	}
 
-	public int getbHate() {
-		return bHate;
+	public int getbDislike() {
+		return bDislike;
 	}
 
-	public void setbHate(int bHate) {
-		this.bHate = bHate;
+	public void setbDislike(int bDislike) {
+		this.bDislike = bDislike;
 	}
 
 	public String getContent() {
@@ -136,7 +136,7 @@ public class BoardDTO {
 	@Override
 	public String toString() {
 		return "BoardDTO [bno=" + bno + ", title=" + title + ", writer=" + writer + ", nick=" + nick + ", bCount="
-				+ bCount + ", bDate=" + bDate + ", bLike=" + bLike + ", bHate=" + bHate + ", content=" + content
+				+ bCount + ", bDate=" + bDate + ", bLike=" + bLike + ", bDislike=" + bDislike + ", content=" + content
 				+ ", cCount=" + cCount + "]";
 	}
 

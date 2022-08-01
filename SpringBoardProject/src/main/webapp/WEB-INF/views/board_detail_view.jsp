@@ -111,6 +111,10 @@
 	.comment_form p {
 		margin:0;
 	}
+	.f_img {
+		width:300px;
+		height: 100px;
+	}
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
@@ -130,33 +134,28 @@
 					}else{
 						alert("댓글 등록 실패");
 					}
-					location.reload();	
+					location.reload();
 				}
 			});
 		});
 		$(".btn_like").click(function(){
 			// 0 - like, 1 - hate
 			// bno;
-			var obj = $(this);
-			d = "bno=${requestScope.board.bno}&mode="+$(this).index();
+			var mode = $(this).index();
+			d = "bno=${board.bno}&mode="+mode;
 			$.ajax({
-				url : "plusLikeHate.do",
+				url : "plusLikeDislike.do",
 				data : d,
 				method : "get",
 				success:function(result){
-					result = result.trim();
-					if(result == "false"){
-						alert("로그인후 이용하실 수 있습니다.");
-						location.href="${pageContext.request.contextPath}/loginView.do";
-					}
-					console.log(result, result.length);
-					$(obj).children("span").html(result);
+					msg = (mode == 0 ? "좋아요" : "싫어요");
+					msg += (result == 1 ? "를 눌렀습니다." : "를 취소하였습니다");
+					alert(msg);
+					location.reload();
 					
 				},
 				error : function(request, status, error) {
 					alert(request.responseText.trim());
-					location.href="${pageContext.request.contextPath}/loginView.do";
-					
 				}
 			});
 		});
@@ -181,42 +180,45 @@
 					<th>제목</th>
 					<td>
 						<!-- 조회한 내용 -->
-						${requestScope.board.title }
+						${board.title }
 					</td>
 				</tr>
 				<tr>
 					<th>작성자</th>
 					<td>
-						${requestScope.board.writer }			
+						${board.writer }			
 					</td>
 				</tr>
 				<tr>
 					<th>조회수</th>
 					<td>
-						${requestScope.board.bCount }
+						${board.bCount }
 					</td>
 				</tr>
 				<tr>
 					<th>작성일</th>
 					<td>
-						${requestScope.board.bDate }
+						${board.bDate }
 					</td>
 				</tr>
 				<tr>
 					<th style="vertical-align: top;">내용</th>
 					<td>
-						${requestScope.board.content }
+						${board.content }
 					</td>
 				</tr>
 				<tr>
 					<td colspan="2">
 						첨부파일<br>
-						<c:forEach var="f" items="${requestScope.flist }">
+						<c:forEach var="f" items="${flist }">
+						<c:set var="ind" value="${ind+1}"/>
 							<a href="fileDown.do?fno=${f.fno}&bno=${f.bno}">
-							${f.fileName}</a><br>
+							${ind} - ${f.fileName}</a><br>
+							
 							<!-- 해당 파일이 이미지인지? -->
 							<c:if test="${f.type =='image' }">
-								<img src="imageLoad.do?file=${f.fileName}&type=${f.type}">
+								▼▼<br>
+								<img src="fileDown.do?fno=${f.fno}&bno=${f.bno}" class="f_img"><br>
 							</c:if>
 						</c:forEach>
 					</td>
@@ -226,12 +228,12 @@
 						<a href="#" class="btn_like">
 							<img src="${pageContext.request.contextPath }/img/like.png">
 							<!-- 좋아요 개수 -->
-							<span>${requestScope.board.bLike }</span>
+							<span>${board.bLike }</span>
 						</a>
 						<a href="#" class="btn_like">
 							<img src="${pageContext.request.contextPath }/img/like.png" class="hate">
 							<!-- 싫어요 개수 -->
-							<span>${requestScope.board.bLike }</span>
+							<span>${board.bDislike }</span>
 						</a>
 					</td>
 				</tr>
@@ -240,7 +242,7 @@
 					<td colspan="2">
 						<div class="comment_form">
 							<form id="comment">
-							<input type="hidden" name="bno" value="${requestScope.board.bno }">
+							<input type="hidden" name="bno" value="${board.bno }">
 							<input type="hidden" name="writer" value="${sessionScope.id }">
 							<span class="writer">${sessionScope.id }</span>
 							<textarea name="content" maxlength="500"></textarea>
@@ -252,11 +254,11 @@
 				</tr>
 					</c:if>
 				<tr>
-					<th><a href="/main.do" class="btn">목록보기</a></th>
+					<th><a href="/" class="btn">목록보기</a></th>
 					<td style="text-align: right;">
 					<c:if test="${sessionScope.id == requestScope.board.writer }">
 						<a href="boardUpdateView.do" class="btn">수정</a>
-						<a href="deleteBoard.do?bno=${requestScope.board.bno }" class="btn">삭제</a>
+						<a href="deleteBoard.do?bno=${board.bno }" class="btn">삭제</a>
 					</c:if>
 						<a href="#" class="btn">이전글</a>
 						<a href="#" class="btn">다음글</a>
@@ -267,14 +269,14 @@
 				
 						<td colspan="2">
 					
-					<c:forEach var="comment" items="${requestScope.comment }">
-						<p>${comment.writer }
-						${comment.cdate }
-						<a href="commentLike.do?cno=${comment.cno }&bno=${board.bno}">${comment.clike }</a>
-						<a href="commentHate.do?cno=${comment.cno }&bno=${board.bno}">${comment.chate }</a>
+					<c:forEach var="c" items="${comment }">
+						<p>${c.writer }
+						${c.cdate }
+						<a href="commentLike.do?cno=${c.cno }&bno=${board.bno}">${c.clike }</a>
+						<a href="commentDislike.do?cno=${c.cno }&bno=${board.bno}">${c.cDislike }</a>
 						</p>
 						<p>
-							${comment.content }
+							${c.content }
 						</p>
 					</c:forEach>
 					

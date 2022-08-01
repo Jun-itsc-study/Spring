@@ -6,30 +6,30 @@ import org.apache.ibatis.type.Alias;
 public class BoardCommentDTO {
 	private int cno;
 	private int bno;
-	private String comment;
+	private String content;
 	private String writer;
 	private String cdate;
 	private int clike;
-	private int chate;
+	private int cDislike;
 
 	public BoardCommentDTO() {
 	}
 
-	public BoardCommentDTO(int cno, int bno, String comment, String writer, String date, int like, int hate) {
+	public BoardCommentDTO(int cno, int bno, String content, String writer, String date, int like, int cDislike) {
 		super();
 		this.cno = cno;
 		this.bno = bno;
-		this.comment = comment;
+		this.content = content;
 		this.writer = writer;
 		this.cdate = date;
 		this.clike = like;
-		this.chate = hate;
+		this.cDislike = cDislike;
 	}
 
-	public BoardCommentDTO(int bno, String comment, String writer) {
+	public BoardCommentDTO(int bno, String content, String writer) {
 		super();
 		this.bno = bno;
-		this.comment = comment;
+		this.content = content;
 		this.writer = writer;
 	}
 
@@ -49,12 +49,12 @@ public class BoardCommentDTO {
 		this.bno = bno;
 	}
 
-	public String getComment() {
-		return comment;
+	public String getContent() {
+		return content;
 	}
 
-	public void setComment(String comment) {
-		this.comment = comment;
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 	public String getWriter() {
@@ -81,12 +81,12 @@ public class BoardCommentDTO {
 		this.clike = clike;
 	}
 
-	public int getChate() {
-		return chate;
+	public int getcDislike() {
+		return cDislike;
 	}
 
-	public void setChate(int chate) {
-		this.chate = chate;
+	public void setcDislike(int cDislike) {
+		this.cDislike = cDislike;
 	}
 
 	

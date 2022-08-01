@@ -1,6 +1,8 @@
 package com.example.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -33,6 +35,13 @@ public class MemberService {
 
 	public int updateMember(MemberDTO dto) {
 		return mapper.updateMember(dto);
+	}
+	
+	public List<MemberDTO> searchMember(String kind, String search) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("kind", kind);
+		map.put("search", search);
+		return mapper.searchMember(map);
 	}
 	
 }

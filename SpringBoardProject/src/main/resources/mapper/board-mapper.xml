@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.koreait.mapper.BoardMapper">
+	<select id="selectBoardList" parameterType="int"
+		resultType="board">
+		select * from (select ceil(rownum / 15) as pageNo, b.* from
+		board_view b)
+		where pageNo = #{pageNo}
+	</select>
+	<select id="selectBoardCount" resultType="int">
+		select count(*) from
+		board_view
+	</select>
+	<select id="selectBoardDTO" parameterType="int"	resultType="board">
+		select * from board_view where bno = #{bno}
+	</select>
+	<select id="selectCommentDTO" parameterType="int" resultType="comment">
+		select * from board_comment_view where bno = #{bno}
+	</select>
+	<select id="selectFileList" parameterType="int" resultType="file">
+		select * from board_file where bno = #{bno} 
+	</select>
+	<update id="addBoardCount" parameterType="int">
+		update board set bcount = bcount + 1 where bno = #{bno}
+	</update>
+</mapper>
+
+
+
+
+
+
+

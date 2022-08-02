@@ -20,4 +20,6 @@ public interface MemberMapper {
 
 	int deleteMember(String id);
 
+	List<MemberDTO> memberSearch(Map<String, Object> map);
+
 }

@@ -19,6 +19,21 @@
 	<delete id="deleteMember" parameterType="String">
 		delete from board_member where id = #{id}
 	</delete>
+	<select id="memberSearch" parameterType="map" resultType="member">
+		select id, passwd, name, nick, grade_no as gradeNo 
+		from board_member where
+		<choose>
+			<when test="kind.equals('id')">
+				id like '%' || #{search} || '%'
+			</when>
+			<when test="kind.equals('name')">
+				name like '%' || #{search} || '%'
+			</when>
+			<otherwise>
+				grade_no = #{search}
+			</otherwise>
+		</choose>
+	</select>
 </mapper>
 
 

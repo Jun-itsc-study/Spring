@@ -39,6 +39,18 @@ public class MemberService {
 	public int deleteMember(String id) {
 		return mapper.deleteMember(id);
 	}
+
+
+	public List<MemberDTO> memberSearch(String kind, String search) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("kind", kind);
+		if(kind.equals("gradeNo")) {
+			map.put("search", Integer.parseInt(search));
+		}else {
+			map.put("search", search);
+		}
+		return mapper.memberSearch(map);
+	}
 	
 	
 }

@@ -21,6 +21,8 @@ import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
+import org.springframework.boot.configurationprocessor.json.JSONArray;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -261,6 +263,13 @@ public class MainController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@RequestMapping("memberSearch.do")
+	public ResponseEntity<List<MemberDTO>> memberSerach(String kind, String search) {
+		List<MemberDTO> list = memberService.memberSearch(kind, search);
+		return ResponseEntity.ok(list);
+		
 	}
 	
 }

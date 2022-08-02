@@ -37,11 +37,11 @@
 	<ul>
 		<li><a href="/">HOME</a></li>
 		<li><a href="logout.do">로그아웃</a></li>
-		<c:if test="${sessionScope.grade == 6 }">
-			<li><a href="member_manage_main.jsp">전체 회원 관리</a></li>
+		<c:if test="${sessionScope.gradeNo >= 6 }">
+			<li><a href="memberManageView.do">전체 회원 관리</a></li>
 			<li><a href="qnaAdminView.do">회원문의내역</a></li>
 		</c:if>			
-		<c:if test="${sessionScope.grade < 6 }">
+		<c:if test="${sessionScope.gradeNo < 6 }">
 		<li><a href="qnaView.do">문의하기</a></li>
 		<li><a href="updateView.do">회원정보수정</a></li>
 		</c:if>
@@ -50,22 +50,22 @@
 		<table>
 			<tr>
 				<c:choose>
-					<c:when test="${sessionScope.grade==1}">
+					<c:when test="${sessionScope.gradeNo==1}">
 						<td><img src="/img/bronze.png" style="width:32px;"></td>
 					</c:when>
-					<c:when test="${sessionScope.grade==2}">
+					<c:when test="${sessionScope.gradeNo==2}">
 						<td><img src="/img/silver.png" style="width:32px;"></td>
 					</c:when>
-					<c:when test="${sessionScope.grade==3}">
+					<c:when test="${sessionScope.gradeNo==3}">
 						<td><img src="/img/gold.png" style="width:32px;"></td>
 					</c:when>
-					<c:when test="${sessionScope.grade==4}">
+					<c:when test="${sessionScope.gradeNo==4}">
 						<td><img src="/img/vip.png" style="width:32px;"></td>
 					</c:when>
-					<c:when test="${sessionScope.grade==5}">
+					<c:when test="${sessionScope.gradeNo==5}">
 						<td><img src="/img/vvip.png" style="width:32px;"></td>
 					</c:when>
-					<c:when test="${sessionScope.grade==6}">
+					<c:when test="${sessionScope.gradeNo>=6}">
 						<td><img src="/img/master.png" style="width:32px;"></td>
 					</c:when>
 				</c:choose>
@@ -104,8 +104,8 @@
 </style>
 <nav id="menu_bar">
 	<ul>
-		<li><a href="main.do">HOME</a></li>
-		<li><a href="register.jsp">회원가입</a></li>
+		<li><a href="/">HOME</a></li>
+		<li><a href="registerView.do">회원가입</a></li>
 		<li><a href="loginView.do">로그인</a></li>
 		<li><a href="#">문의하기</a></li>
 	</ul>

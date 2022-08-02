@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.koreait.dto.BoardCommentDTO;
 import com.koreait.dto.BoardDTO;
 import com.koreait.dto.FileDTO;
+import com.koreait.dto.MemberDTO;
 import com.koreait.mapper.BoardMapper;
 
 @Service
@@ -80,8 +81,6 @@ public class BoardService {
 	public String fileDown(FileDTO dto) {
 		return mapper.fileDown(dto);
 	}
-
-	
 }
 
 

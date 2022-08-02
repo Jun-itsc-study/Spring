@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.koreait.dto.BoardCommentDTO;
 import com.koreait.dto.BoardDTO;
 import com.koreait.dto.FileDTO;
+import com.koreait.dto.MemberDTO;
 
 @Mapper
 public interface BoardMapper {

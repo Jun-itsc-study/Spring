@@ -4,9 +4,21 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.koreait.mapper.MemberMapper">
 	<select id="login" parameterType="Map" resultType="member">
-		select id, passwd, name, nick, grade_no as grade 
+		select id, passwd, name, nick, grade_no as gradeNo 
 		from board_member where id = #{id} and passwd = #{passwd}
 	</select>
+	<insert id="insertMember" parameterType="member">
+		insert into board_member values(#{id},#{passwd},#{name},#{nick},#{gradeNo})
+	</insert>
+	<select id="selectAllMember" resultType="member">
+		select id, passwd, name, nick, grade_no as gradeNo from board_member
+	</select>
+	<update id="updateMember" parameterType="member">
+		update board_member set passwd=#{passwd}, name=#{name}, nick=#{nick}, grade_no=#{gradeNo} where id=#{id}
+	</update>
+	<delete id="deleteMember" parameterType="String">
+		delete from board_member where id = #{id}
+	</delete>
 </mapper>
 
 

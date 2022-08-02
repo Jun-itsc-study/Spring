@@ -80,9 +80,7 @@ public class MainController {
 	}
 
 	@RequestMapping("loginView.do")
-	public String loginView() {
-		return "login";
-	}
+	public String loginView() {return "login";}
 
 	@RequestMapping("login.do")
 	public String login(String id, String pass, HttpSession session) {
@@ -91,7 +89,7 @@ public class MainController {
 			session.setAttribute("login", true);
 			session.setAttribute("id", dto.getId());
 			session.setAttribute("name", dto.getName());
-			session.setAttribute("grade", dto.getGradeNo());
+			session.setAttribute("gradeNo", dto.getGradeNo());
 			return "redirect:/";
 		} else {
 			session.setAttribute("login", false);
@@ -145,9 +143,7 @@ public class MainController {
 	}//plusLikeDislike
 	
 	@RequestMapping("boardWriteView.do")
-	public String boardWriteView() {
-		return "board_write_view";
-	}
+	public String boardWriteView() {return "board_write_view";}
 	
 	@RequestMapping("boardWrite.do")
 	public String boardWrite(BoardDTO dto, MultipartHttpServletRequest req) {
@@ -224,4 +220,47 @@ public class MainController {
 			e.printStackTrace();
 		}
 	}
+	
+	@RequestMapping("registerView.do")
+	public String registerView() {return "register";}
+	
+	@RequestMapping("register.do")
+	public String register(MemberDTO dto) {
+		memberService.insertMember(dto);
+		return "redirect:/loginView.do";
+	}
+	
+	@RequestMapping("logout.do")
+	public String logout(HttpSession session) {
+		session.invalidate();
+		return "redirect:/";
+	}
+	
+	@RequestMapping("memberManageView.do")
+	public String memberManage(Model model) {
+		List<MemberDTO> list = memberService.selectAllMember();
+		model.addAttribute("list",list);
+		return "member_manage";
+	}
+	
+	@RequestMapping("memberUpdate.do")
+	public void memberUpdate(MemberDTO dto, HttpServletResponse res) {
+		int result = memberService.updateMember(dto);
+		try {
+			res.getWriter().write(String.valueOf(result));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping("memberDelete.do")
+	public void memberDelete(String id, HttpServletResponse res) {
+		int result = memberService.deleteMember(id);
+		try {
+			res.getWriter().write(String.valueOf(result));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }

@@ -5,23 +5,19 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.tomcat.util.http.fileupload.FileItem;
-import org.apache.tomcat.util.http.fileupload.FileUploadException;
-import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
-import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
-import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
-import org.springframework.boot.configurationprocessor.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -144,13 +140,26 @@ public class MainController {
 		}
 	}//plusLikeDislike
 	
+	@RequestMapping("commentLikeDislike.do")
+	public String commentLikeDislike(BoardCommentDTO dto, int mode, HttpServletResponse res, HttpSession session) {
+		dto.setWriter((String)session.getAttribute("id"));
+		try {
+		if(mode == 0) boardService.commentPlusLike(dto);
+		else boardService.commentPlusDislike(dto);
+		} catch(Exception e) {
+			if(mode == 0) boardService.commentMinusLike(dto);
+			else boardService.commentMinusDislike(dto);
+		} 
+		return "redirect:/boardView.do?bno="+dto.getBno();
+	}//commentLikeDislike
+	
+	
 	@RequestMapping("boardWriteView.do")
 	public String boardWriteView() {return "board_write_view";}
 	
 	@RequestMapping("boardWrite.do")
 	public String boardWrite(BoardDTO dto, MultipartHttpServletRequest req) {
 		int bno = boardService.boardWrite(dto);
-		
 		String root = "c:\\fileUpload\\";
 		File userRoot = new File(root);
 		if(!userRoot.exists())
@@ -161,12 +170,12 @@ public class MainController {
 		
 		for(MultipartFile mf : fileList) {
 			String fileName = mf.getOriginalFilename();
-			System.out.println(fileName);
+//			System.out.println(fileName);
 			if(mf.getSize() == 0) continue;
 			
 			//실제 저장할 경로
 			File uploadFile = new File(root + "\\" + fileName);
-			System.out.println(uploadFile.getAbsolutePath());
+//			System.out.println(uploadFile.getAbsolutePath());
 			try {
 				mf.transferTo(uploadFile);
 				list.add(new FileDTO(uploadFile, bno, list.size()));
@@ -185,7 +194,7 @@ public class MainController {
 	}
 	
 	@RequestMapping("fileDown.do")
-	public String fileDown(FileDTO dto, HttpServletResponse response) {
+	public void fileDown(FileDTO dto, HttpServletResponse response) {
 		String path = boardService.fileDown(dto);
 		File file = new File(path);
 //		String file = path.substring(path.lastIndexOf("\\")+1);
@@ -210,7 +219,6 @@ public class MainController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return "redirect:/boardView.do?bno="+dto.getBno();
 	}
 	
 	@RequestMapping("imageLoad")
@@ -269,7 +277,75 @@ public class MainController {
 	public ResponseEntity<List<MemberDTO>> memberSerach(String kind, String search) {
 		List<MemberDTO> list = memberService.memberSearch(kind, search);
 		return ResponseEntity.ok(list);
-		
 	}
 	
+	@RequestMapping("commentDelete.do")
+	public String commentDelete(BoardCommentDTO dto) {
+		boardService.commentDelete(dto);
+		return "redirect:/boardView.do?bno="+dto.getBno();
+	}
+	
+	@RequestMapping("fileUpload.do")
+	public void fileUpload(@RequestParam(value="upload")MultipartFile fileload, HttpServletResponse res, HttpSession session) {
+		//서버에 파일을 저장할 때에는 파일명을 시간값으로 변경
+		//DB에 저장할 때에는 원본파일명과 시간값을 모두 저장
+		//filename 저장
+		String originFileName = fileload.getOriginalFilename();
+		//upload경로 설정
+		String root = "c:\\fileupload\\";
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss");
+		String date = sdf.format(Calendar.getInstance().getTime());
+		System.out.println("원본파일 : "+originFileName);
+		System.out.println(originFileName.indexOf("."));
+		System.out.println(originFileName.substring(originFileName.indexOf(".")+1));
+		System.out.println(date);
+		
+		String fileName = date+"_"+session.getAttribute("id")+originFileName.substring(originFileName.indexOf("."));
+		System.out.println(fileName);
+		File file = new File(root+"\\"+fileName);
+		
+		int fno = boardService.insertImage(file.getAbsolutePath());
+		try {
+			PrintWriter pw = res.getWriter();
+			fileload.transferTo(file);
+			JSONObject obj = new JSONObject();
+			obj.put("uploaded", true);
+			obj.put("url", "imageDown.do?fno="+fno);
+			pw.write(obj.toString());
+		}catch (IOException e) {
+			JSONObject obj = new JSONObject();
+			obj.put("uploaded", false);
+			JSONObject msg = new JSONObject();
+			msg.put("message", "파일 업로드 중 에러 발생");
+			obj.put("error", msg);
+		}
+	}
+	
+	@RequestMapping("imageDown.do")
+	public void imageDown(int fno, HttpServletResponse res) {
+		String path = boardService.selectImageFile(fno);
+		
+		File file = new File(path);
+		res.setHeader("Content-Disposition", "attachement;fileName="+file.getName());
+		res.setHeader("Content-Transfer-Encoding", "binary");
+		res.setContentLength((int)file.length());
+		
+		try {
+			FileInputStream fis = new FileInputStream(file);
+			BufferedOutputStream bos = new BufferedOutputStream(res.getOutputStream());
+			byte[] buffer = new byte[10485760];
+			while(true) {
+				int size = fis.read(buffer);
+				if(size == -1) break;
+				bos.write(buffer,0,size);
+				bos.flush();
+			}
+			fis.close();
+			bos.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

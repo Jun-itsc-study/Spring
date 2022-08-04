@@ -29,4 +29,12 @@ public interface BoardMapper {
 	int selectBoardNo();
 	void fileUpload(FileDTO file);
 	String fileDown(FileDTO dto);
+	int commentPlusLike(BoardCommentDTO dto);
+	int commentPlusDislike(BoardCommentDTO dto);
+	int commentMinusLike(BoardCommentDTO dto);
+	int commentMinusDislike(BoardCommentDTO dto);
+	int commentDelete(BoardCommentDTO dto);
+	int selectBoardImageNo();
+	void insertBoardImage(Map<String, Object> map);
+	String selectImageFile(int fno);
 }

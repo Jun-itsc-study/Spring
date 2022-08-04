@@ -57,7 +57,31 @@
 	<select id="fileDown" parameterType="file" resultType="String">
 		select path from board_file where fno=#{fno} and bno=#{bno}
 	</select>
-</mapper>
+	<insert id="commentPlusLike" parameterType="comment">
+		insert into board_comment_like values(#{cno}, #{writer})
+	</insert>
+	<delete id="commentMinusLike" parameterType="comment">
+		delete from board_comment_like where cno=#{cno} and writer=#{writer}
+	</delete>
+	<insert id="commentPlusDislike" parameterType="comment">
+		insert into board_comment_dislike values(#{cno}, #{writer})
+	</insert>
+	<delete id="commentMinusDislike" parameterType="comment">
+		delete from board_comment_dislike where cno=#{cno} and writer=#{writer}
+	</delete>
+	<delete id="commentDelete" parameterType="comment">
+		delete from board_comment where cno=#{cno} and bno=#{bno}
+	</delete>
+	<select id="selectBoardImageNo" resultType="int">
+		select bi_no_seq.nextval from dual
+	</select>
+	<insert id="insertBoardImage" parameterType="map">
+		insert into board_image values(#{fno}, #{path})
+	</insert>
+	<select id="selectImageFile" parameterType="int" resultType="String">
+		select path from board_image where bi_no = #{fno}
+	</select>
+</mapper> 
 
 
 

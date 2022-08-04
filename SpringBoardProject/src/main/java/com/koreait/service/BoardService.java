@@ -1,5 +1,6 @@
 package com.koreait.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -80,6 +81,39 @@ public class BoardService {
 
 	public String fileDown(FileDTO dto) {
 		return mapper.fileDown(dto);
+	}
+
+	public int commentPlusLike(BoardCommentDTO dto) {
+		return mapper.commentPlusLike(dto);
+	}
+
+	public int commentPlusDislike(BoardCommentDTO dto) {
+		return mapper.commentPlusDislike(dto);
+	}
+
+	public int commentMinusLike(BoardCommentDTO dto) {
+		return mapper.commentMinusLike(dto);
+	}
+
+	public int commentMinusDislike(BoardCommentDTO dto) {
+		return mapper.commentMinusDislike(dto);
+	}
+
+	public int commentDelete(BoardCommentDTO dto) {
+		return mapper.commentDelete(dto);
+	}
+
+	public int insertImage(String path) {
+		int fno = mapper.selectBoardImageNo();
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("fno", fno);
+		map.put("path", path);
+		mapper.insertBoardImage(map);
+		return fno;
+	}
+
+	public String selectImageFile(int fno) {
+		return mapper.selectImageFile(fno);
 	}
 }
 

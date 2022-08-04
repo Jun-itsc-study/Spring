@@ -116,6 +116,7 @@
 		height: 100px;
 	}
 </style>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
 	$(function(){
@@ -205,6 +206,7 @@
 					<th style="vertical-align: top;">내용</th>
 					<td>
 						${board.content }
+						<script>alert(${board.content})</script>
 					</td>
 				</tr>
 				<tr>
@@ -272,8 +274,12 @@
 					<c:forEach var="c" items="${comment }">
 						<p>${c.writer }
 						${c.cdate }
-						<a href="commentLike.do?cno=${c.cno }&bno=${board.bno}">${c.clike }</a>
-						<a href="commentDislike.do?cno=${c.cno }&bno=${board.bno}">${c.cDislike }</a>
+						<a href="commentLikeDislike.do?mode=0&cno=${c.cno }&bno=${c.bno}">${c.clike }</a>
+						<a href="commentLikeDislike.do?mode=1&cno=${c.cno }&bno=${c.bno}">${c.cDislike }</a>
+						<!-- 댓글 삭제 -->
+						<c:if test="${sessionScope.gradeNo >=6 || sessionScope.id == c.writer }">
+							<a href="commentDelete.do?cno=${c.cno }&bno=${c.bno}">삭제</a>
+						</c:if>
 						</p>
 						<p>
 							${c.content }

@@ -81,6 +81,30 @@
 	<select id="selectImageFile" parameterType="int" resultType="String">
 		select path from board_image where bi_no = #{fno}
 	</select>
+	<select id="selectQnaList" parameterType="String" resultType="qna">
+		select * from board_qna where writer = #{writer} order by qno desc
+	</select>
+	<select id="selectQnaListAll" resultType="qna">
+		select * from board_qna order by qno desc
+	</select>
+	<select id="selectQnaCountAll" resultType="int">
+		select count(*) from board_qna
+	</select>
+	<select id="selectQnaCount" parameterType="String" resultType="int">
+		select count(*) from board_qna where writer=#{writer}
+	</select>
+	<insert id="insertQna" parameterType="qna">
+		insert into board_qna(qno, title, content, writer) values(qno_seq.nextval, #{title}, #{content}, #{writer})
+	</insert>
+	<select id="selectQna" parameterType="int" resultType="qna">
+		select * from board_qna where qno = #{qno}
+	</select>
+	<update id="changeStatus" parameterType="map">
+		update board_qna set status = #{status} where qno = #{qno}
+	</update>
+	<update id="insertResponse" parameterType="qna">
+		update board_qna set response = #{response} where qno = #{qno}
+	</update>
 </mapper> 
 
 

@@ -39,7 +39,7 @@
 		<li><a href="logout.do">로그아웃</a></li>
 		<c:if test="${sessionScope.gradeNo >= 6 }">
 			<li><a href="memberManageView.do">전체 회원 관리</a></li>
-			<li><a href="qnaAdminView.do">회원문의내역</a></li>
+			<li><a href="qnaView.do">회원문의내역</a></li>
 		</c:if>			
 		<c:if test="${sessionScope.gradeNo < 6 }">
 		<li><a href="qnaView.do">문의하기</a></li>

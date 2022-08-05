@@ -17,6 +17,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -28,20 +29,23 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.koreait.dto.BoardCommentDTO;
 import com.koreait.dto.BoardDTO;
+import com.koreait.dto.BoardQnaDTO;
 import com.koreait.dto.FileDTO;
 import com.koreait.dto.MemberDTO;
 import com.koreait.service.BoardService;
 import com.koreait.service.MemberService;
+import com.koreait.service.QnaService;
 import com.koreait.vo.PaggingVO;
 
 @Controller
 public class MainController {
 	private BoardService boardService;
 	private MemberService memberService;
-
-	public MainController(BoardService boardService, MemberService memberService) {
+	private QnaService qnaService;
+	public MainController(BoardService boardService, MemberService memberService, QnaService qnaService) {
 		this.boardService = boardService;
 		this.memberService = memberService;
+		this.qnaService = qnaService;
 	}
 
 	@RequestMapping("/")
@@ -347,5 +351,66 @@ public class MainController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@RequestMapping("qnaView.do")
+	public String qnaView(HttpSession session, Model model) {
+		List<BoardQnaDTO> list = new ArrayList<BoardQnaDTO>();
+		int gradeNo = (int) session.getAttribute("gradeNo");
+		String writer = (String)session.getAttribute("id");
+		if(writer == null) return "redirect:/loginView.do";
+		int page = 1;
+		String url="board_qna";
+		if(gradeNo >= 6) {
+			list = qnaService.selectQnaListAll();
+			url = "board_qna_list";
+		}else {
+			list = qnaService.selectQnaList(writer, page);
+		}
+		model.addAttribute("list",list);
+		
+		return url;
+	}
+	
+	@RequestMapping("boardQnaWrite.do")
+	public String boardQnaWrite(BoardQnaDTO dto, HttpServletResponse res) {
+		qnaService.insertQna(dto);
+		return "redirect:/qnaView.do";
+	}
+	
+	@RequestMapping("qnaDetail.do")
+	public String qnaDetail(int qno, HttpSession session, Model model) {
+		BoardQnaDTO dto = qnaService.selectQna(qno);
+		if((int)session.getAttribute("gradeNo") >= 6 && dto.getStatus() == 0) {
+			qnaService.changeStatus(qno, 1);
+		}
+		model.addAttribute("dto",dto);
+		return "qna_detail";
+	}
+	@RequestMapping("insertResponse.do")
+	public void insertResponse(BoardQnaDTO dto, HttpServletResponse res) {
+		int result = qnaService.insertResponse(dto);
+		if(result == 1) {
+			int r = qnaService.changeStatus(dto.getQno(), 2);
+		}
+		try {
+			res.getWriter().write(String.valueOf(result));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping("qnaMore.do")
+	public ResponseEntity<HashMap<String,Object>> qnaMore(int page, HttpSession session) {
+		List<BoardQnaDTO> list = new ArrayList<BoardQnaDTO>();
+		String id = (String)session.getAttribute("id");
+		list = qnaService.selectQnaList(id, page);
+		int nextPage = qnaService.selectQnaList(id, page+1).size();
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("list", list);
+		map.put("nextPage", nextPage);
+		
+		return ResponseEntity.ok(map);
+		
 	}
 }

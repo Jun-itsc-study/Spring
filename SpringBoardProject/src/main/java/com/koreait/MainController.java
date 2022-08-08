@@ -35,7 +35,7 @@ import com.koreait.dto.MemberDTO;
 import com.koreait.service.BoardService;
 import com.koreait.service.MemberService;
 import com.koreait.service.QnaService;
-import com.koreait.vo.PaggingVO;
+import com.koreait.vo.PagingVO;
 
 @Controller
 public class MainController {
@@ -53,12 +53,12 @@ public class MainController {
 //		System.out.println(pageNo);
 		List<BoardDTO> list = boardService.selectBoardList(pageNo);
 		model.addAttribute("list", list);
-
+		
 		// 페이징 처리
 		int count = boardService.selectBoardCount();
-		PaggingVO vo = new PaggingVO(count, pageNo, 10, 5);
-		model.addAttribute("pagging", vo);
-
+		PagingVO vo = new PagingVO(count, pageNo, 15, 5);
+		model.addAttribute("paging", vo);
+		
 		return "main";
 	}
 
@@ -72,8 +72,20 @@ public class MainController {
 		if (set == null)
 			set = new HashSet<Integer>();
 
-		if (set.add(bno))
-			boardService.addBoardCount(bno);
+		if (set.add(bno)) boardService.addBoardCount(bno);
+		
+		int max = boardService.selectMaxRN();
+		int min = boardService.selectMinRN();
+		int rn = boardService.selectRownum(bno);
+		if(rn != min) {
+			int prev = boardService.selectPNBoard(rn-1);
+			model.addAttribute("prev",prev);
+		}
+		if(rn != max) {
+			int next = boardService.selectPNBoard(rn+1);
+			model.addAttribute("next", next);
+		}
+		
 		session.setAttribute("bno_history", set);
 		model.addAttribute("board", dto);
 		model.addAttribute("flist", flist);
@@ -356,22 +368,24 @@ public class MainController {
 	@RequestMapping("qnaView.do")
 	public String qnaView(HttpSession session, Model model) {
 		List<BoardQnaDTO> list = new ArrayList<BoardQnaDTO>();
-		int gradeNo = (int) session.getAttribute("gradeNo");
 		String writer = (String)session.getAttribute("id");
 		if(writer == null) return "redirect:/loginView.do";
 		int page = 1;
-		String url="board_qna";
-		if(gradeNo >= 6) {
-			list = qnaService.selectQnaListAll();
-			url = "board_qna_list";
-		}else {
-			list = qnaService.selectQnaList(writer, page);
-		}
+		list = qnaService.selectQnaList(writer, page);
 		model.addAttribute("list",list);
 		
-		return url;
+		return "board_qna";
 	}
-	
+	@RequestMapping("qnaAdminView.do")
+	public String qndAdminView(@RequestParam(name="pageNo", defaultValue="1") int pageNo, Model model) {
+		List<BoardQnaDTO> list = new ArrayList<BoardQnaDTO>();
+		list = qnaService.selectQnaListAll();
+		int count = qnaService.selectQnaCountAll();
+		PagingVO vo = new PagingVO(count, pageNo, 10, 5);
+		model.addAttribute("paging", vo);
+		model.addAttribute("list",list);
+		return "board_qna_list";
+	}
 	@RequestMapping("boardQnaWrite.do")
 	public String boardQnaWrite(BoardQnaDTO dto, HttpServletResponse res) {
 		qnaService.insertQna(dto);
@@ -381,18 +395,16 @@ public class MainController {
 	@RequestMapping("qnaDetail.do")
 	public String qnaDetail(int qno, HttpSession session, Model model) {
 		BoardQnaDTO dto = qnaService.selectQna(qno);
-		if((int)session.getAttribute("gradeNo") >= 6 && dto.getStatus() == 0) {
-			qnaService.changeStatus(qno, 1);
-		}
+		qnaService.changeStatus(qno, 1);
+		dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
+		if(dto.getResponse()!=null) dto.setResponse(dto.getResponse().replaceAll("\n", "<br>"));
 		model.addAttribute("dto",dto);
 		return "qna_detail";
 	}
 	@RequestMapping("insertResponse.do")
-	public void insertResponse(BoardQnaDTO dto, HttpServletResponse res) {
+	public void insertResponse(BoardQnaDTO dto, HttpServletResponse res, HttpSession session) {
+		dto.setResponse("_"+session.getAttribute("id")+" : "+dto.getResponse()+"\n");
 		int result = qnaService.insertResponse(dto);
-		if(result == 1) {
-			int r = qnaService.changeStatus(dto.getQno(), 2);
-		}
 		try {
 			res.getWriter().write(String.valueOf(result));
 		} catch (IOException e) {
@@ -411,6 +423,9 @@ public class MainController {
 		map.put("nextPage", nextPage);
 		
 		return ResponseEntity.ok(map);
+	}
+	@RequestMapping("prevNextBoard.do")
+	public void prevNextBoard(int bno, Model model) {
 		
 	}
 }

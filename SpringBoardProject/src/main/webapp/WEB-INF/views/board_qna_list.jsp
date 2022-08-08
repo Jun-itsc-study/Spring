@@ -91,7 +91,7 @@
 		<c:forEach var="dto" items="${list }">
 			<tr>
 				<td>${dto.qno }</td>
-				<td class="a"><a href="qnaDetail.do?qno=${dto.qno }"> ${dto.title }</a></td>
+				<td class="a"><a href="qnaDetail.do?qno=${dto.qno }&pageNo=${paging.currentPageNo}"> ${dto.title }</a></td>
 				<td>${dto.writer}</td>
 				<td>${dto.wdate }</td>
 				<td>
@@ -106,18 +106,17 @@
 			<tr>
 			<td colspan="5">
 					<div class="page_bar">
-						<c:if test="${pagging.previousPageGroup }">
-							<a href="/?pageNo=${pagging.startPageOfPageGroup - 1 }">◀</a>
+						<c:if test="${paging.previousPageGroup }">
+							<a href="/qnaAdminView.do?pageNo=${paging.startPageOfPageGroup - 1 }">◀</a>
 						</c:if>
-						<c:forEach var="i" begin="${pagging.startPageOfPageGroup}" 
-						end="${pagging.endPageOfPageGroup}">
-							<a href="/?pageNo=${i }">${ i}</a>
+						<c:forEach var="i" begin="${paging.startPageOfPageGroup}" 
+						end="${paging.endPageOfPageGroup}">
+							<a href="/qnaAdminView.do?pageNo=${i }">${ i}</a>
 						</c:forEach>
 					
-						<c:if test="${pagging.nextPageGroup }">
-							<a href="/?pageNo=${pagging.endPageOfPageGroup + 1 }">▶</a>
+						<c:if test="${paging.nextPageGroup }">
+							<a href="/qnaAdminView.do?pageNo=${paging.endPageOfPageGroup + 1 }">▶</a>
 						</c:if>
-						<a href="qnaWriteView.do" class="btn_writer">문의글쓰기</a>
 					</div>
 			</tr>
 		</table>

@@ -8,7 +8,7 @@
 	(select qno, title, content, wdate, writer, status, nvl(response, '입력된 답변이 없습니다') as response from board_qna where writer = #{writer} order by qno desc) q) where page = #{page}
 	</select>
 	<select id="selectQnaListAll" resultType="qna">
-		select * from board_qna order by qno desc
+		select * from board_qna order by status asc, qno desc
 	</select>
 	<select id="selectQnaCountAll" resultType="int">
 		select count(*) from board_qna
@@ -23,16 +23,9 @@
 		select * from board_qna where qno = #{qno}
 	</select>
 	<update id="changeStatus" parameterType="map">
-		update board_qna set status = #{status} where qno = #{qno}
+		update board_qna set status = 1 where qno = #{qno} and status = 0
 	</update>
 	<update id="insertResponse" parameterType="qna">
-		update board_qna set response = #{response} where qno = #{qno}
+		update board_qna set response = to_char(sysdate, 'YYYY-MM-DD HH24:MI:SS') || #{response} || response, status=2 where qno = #{qno}
 	</update>
-</mapper> 
-
-
-
-
-
-
-
+</mapper>

@@ -46,4 +46,8 @@ public interface BoardMapper {
 	BoardQnaDTO selectQna(int qno);
 	int changeStatus(Map<String, Integer> map);
 	int insertResponse(BoardQnaDTO dto);
+	int selectMaxRN();
+	int selectMinRN();
+	int selectRownum(int bno);
+	int selectPNBoard(int rn);
 }

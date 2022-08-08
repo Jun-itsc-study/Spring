@@ -81,30 +81,18 @@
 	<select id="selectImageFile" parameterType="int" resultType="String">
 		select path from board_image where bi_no = #{fno}
 	</select>
-	<select id="selectQnaList" parameterType="String" resultType="qna">
-		select * from board_qna where writer = #{writer} order by qno desc
+	<select id="selectMaxRN" resultType="int">
+		select max(rownum) from board
 	</select>
-	<select id="selectQnaListAll" resultType="qna">
-		select * from board_qna order by qno desc
+	<select id="selectMinRN" resultType="int">
+		select min(rownum) from board
 	</select>
-	<select id="selectQnaCountAll" resultType="int">
-		select count(*) from board_qna
+	<select id="selectPNBoard" resultType="int" parameterType="int">
+		select bno from (select rownum rn, board.* from board order by bno desc) where rn=#{rn}
 	</select>
-	<select id="selectQnaCount" parameterType="String" resultType="int">
-		select count(*) from board_qna where writer=#{writer}
+	<select id="selectRownum" resultType="int" parameterType="int">
+		select rn from (select rownum rn, board.* from board order by bno desc) where bno=#{bno}
 	</select>
-	<insert id="insertQna" parameterType="qna">
-		insert into board_qna(qno, title, content, writer) values(qno_seq.nextval, #{title}, #{content}, #{writer})
-	</insert>
-	<select id="selectQna" parameterType="int" resultType="qna">
-		select * from board_qna where qno = #{qno}
-	</select>
-	<update id="changeStatus" parameterType="map">
-		update board_qna set status = #{status} where qno = #{qno}
-	</update>
-	<update id="insertResponse" parameterType="qna">
-		update board_qna set response = #{response} where qno = #{qno}
-	</update>
 </mapper> 
 
 

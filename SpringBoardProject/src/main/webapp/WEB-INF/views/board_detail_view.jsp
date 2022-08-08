@@ -258,13 +258,16 @@
 				<tr>
 					<th><a href="/" class="btn">목록보기</a></th>
 					<td style="text-align: right;">
-					<c:if test="${sessionScope.id == requestScope.board.writer }">
+					<c:if test="${sessionScope.id == board.writer }">
 						<a href="boardUpdateView.do" class="btn">수정</a>
 						<a href="deleteBoard.do?bno=${board.bno }" class="btn">삭제</a>
 					</c:if>
-						<a href="#" class="btn">이전글</a>
-						<a href="#" class="btn">다음글</a>
-						
+						<c:if test="${prev != null }">
+							<a href="/boardView.do?bno=${prev }" class="btn">이전글</a>
+						</c:if>
+						<c:if test="${next != null }">
+							<a href="/boardView.do?bno=${next }" class="btn">다음글</a>
+						</c:if>
 					</td>
 				</tr>
 				<tr>

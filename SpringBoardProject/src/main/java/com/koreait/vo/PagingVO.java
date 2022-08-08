@@ -1,6 +1,6 @@
 package com.koreait.vo;
 
-public class PaggingVO {
+public class PagingVO {
 	//전체 게시글 개수
 	private int count;
 	//현재 페이지 번호
@@ -10,7 +10,7 @@ public class PaggingVO {
 	//게시판 하단에 나타낼 페이지 번호 개수
 	private int pageGroupOfCount;
 
-	public PaggingVO(int count, int currentPageNo, int pageOfContentCount, int pageGroupOfCount) {
+	public PagingVO(int count, int currentPageNo, int pageOfContentCount, int pageGroupOfCount) {
 		super();
 		this.count = count;
 		this.currentPageNo = currentPageNo;

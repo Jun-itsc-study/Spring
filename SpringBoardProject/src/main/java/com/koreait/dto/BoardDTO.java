@@ -14,44 +14,8 @@ public class BoardDTO {
 	private int bDislike;
 	private String content;
 	private int cCount;
-	
+
 	public BoardDTO() {	}
-
-	public BoardDTO(String title, String writer, String content) {
-		super();
-		this.title = title;
-		this.writer = writer;
-		this.content = content;
-	}
-
-	public BoardDTO(int bno, String title, String writer, String nick, int bCount, String bDate, int bLike, int bDislike,
-			int cCount) {
-		super();
-		this.bno = bno;
-		this.title = title;
-		this.writer = writer;
-		this.nick = nick;
-		this.bCount = bCount;
-		this.bDate = bDate;
-		this.bLike = bLike;
-		this.bDislike = bDislike;
-		this.cCount = cCount;
-	}
-
-	public BoardDTO(int bno, String title, String writer, String nick, int bCount, String bDate, int bLike, int bDislike,
-			String content, int cCount) {
-		super();
-		this.bno = bno;
-		this.title = title;
-		this.writer = writer;
-		this.nick = nick;
-		this.bCount = bCount;
-		this.bDate = bDate;
-		this.bLike = bLike;
-		this.bDislike = bDislike;
-		this.content = content;
-		this.cCount = cCount;
-	}
 
 	public int getBno() {
 		return bno;

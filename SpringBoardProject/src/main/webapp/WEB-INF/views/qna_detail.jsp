@@ -191,7 +191,7 @@
 				</tr>
 					</c:if>
 				<tr>
-					<th><a href="qnaView.do" class="btn">목록보기</a></th>
+					<th><a href="qnaAdminView.do?pageNo=${param.pageNo }" class="btn">목록보기</a></th>
 					<td style="text-align: right;">
 					<c:if test="${sessionScope.gradeNo >= 6 }">
 						<a href="deleteQna.do?qno=${dto.qno }" class="btn">삭제</a>

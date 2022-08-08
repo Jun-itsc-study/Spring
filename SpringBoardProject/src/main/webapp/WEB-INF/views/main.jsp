@@ -90,7 +90,7 @@
 				
 			</script>
 		</c:if>
-		<c:forEach var="dto" items="${requestScope.list }">
+		<c:forEach var="dto" items="${list }">
 			<tr>
 				<td>${dto.bno }</td>
 				<td class="a"><a href="boardView.do?bno=${dto.bno }"> ${dto.title }</a></td>
@@ -104,16 +104,23 @@
 			<tr>
 			<td colspan="7">
 					<div class="page_bar">
-						<c:if test="${pagging.previousPageGroup }">
-							<a href="/?pageNo=${pagging.startPageOfPageGroup - 1 }">◀</a>
+						<c:if test="${paging.previousPageGroup }">
+							<a href="/?pageNo=${paging.startPageOfPageGroup - 1 }">◀</a>
 						</c:if>
-						<c:forEach var="i" begin="${pagging.startPageOfPageGroup}" 
-						end="${pagging.endPageOfPageGroup}">
-							<a href="/?pageNo=${i }">${ i}</a>
+						<c:forEach var="i" begin="${paging.startPageOfPageGroup}" 
+						end="${paging.endPageOfPageGroup}">
+							<c:choose>
+								<c:when test="${i == paging.currentPageNo}">
+									<span style="font-weight: bold;font-size:18px;">${i }</span>
+								</c:when>
+								<c:otherwise>
+									<a href="/?pageNo=${i }">${ i}</a>
+								</c:otherwise>
+							</c:choose>
 						</c:forEach>
 					
-						<c:if test="${pagging.nextPageGroup }">
-							<a href="/?pageNo=${pagging.endPageOfPageGroup + 1 }">▶</a>
+						<c:if test="${paging.nextPageGroup }">
+							<a href="/?pageNo=${paging.endPageOfPageGroup + 1 }">▶</a>
 						</c:if>
 						<a href="boardWriteView.do" class="btn_writer">글쓰기</a>
 					</div>

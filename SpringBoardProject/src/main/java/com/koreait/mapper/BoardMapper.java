@@ -50,4 +50,6 @@ public interface BoardMapper {
 	int selectMinRN();
 	int selectRownum(int bno);
 	int selectPNBoard(int rn);
+	int nextBoard(int bno);
+	int prevBoard(int bno);
 }

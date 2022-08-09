@@ -152,20 +152,27 @@ public class BoardService {
 		return mapper.insertResponse(dto);
 	}
 
-	public int selectMaxRN() {
-		return mapper.selectMaxRN();
-	}
+//	public int selectMaxRN() {
+//		return mapper.selectMaxRN();
+//	}
+//
+//	public int selectMinRN() {
+//		return mapper.selectMinRN();
+//	}
+//
+//	public int selectRownum(int bno) {
+//		return mapper.selectRownum(bno);
+//	}
+//
+//	public int selectPNBoard(int rn) {
+//		return mapper.selectPNBoard(rn);
+//	}
 
-	public int selectMinRN() {
-		return mapper.selectMinRN();
+	public int nextBoard(int bno) {
+		return mapper.nextBoard(bno);
 	}
-
-	public int selectRownum(int bno) {
-		return mapper.selectRownum(bno);
-	}
-
-	public int selectPNBoard(int rn) {
-		return mapper.selectPNBoard(rn);
+	public int prevBoard(int bno) {
+		return mapper.prevBoard(bno);
 	}
 }
 

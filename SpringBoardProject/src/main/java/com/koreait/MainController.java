@@ -74,18 +74,22 @@ public class MainController {
 
 		if (set.add(bno)) boardService.addBoardCount(bno);
 		
-		int max = boardService.selectMaxRN();
-		int min = boardService.selectMinRN();
-		int rn = boardService.selectRownum(bno);
-		if(rn != min) {
-			int prev = boardService.selectPNBoard(rn-1);
-			model.addAttribute("prev",prev);
-		}
-		if(rn != max) {
-			int next = boardService.selectPNBoard(rn+1);
-			model.addAttribute("next", next);
-		}
+//		int max = boardService.selectMaxRN();
+//		int min = boardService.selectMinRN();
+//		int rn = boardService.selectRownum(bno);
+//		if(rn != min) {
+//			int prev = boardService.selectPNBoard(rn-1);
+//			model.addAttribute("prev",prev);
+//		}
+//		if(rn != max) {
+//			int next = boardService.selectPNBoard(rn+1);
+//			model.addAttribute("next", next);
+//		}
 		
+		int next = boardService.nextBoard(bno);
+		int prev = boardService.prevBoard(bno);
+		model.addAttribute("next",next);
+		model.addAttribute("prev",prev);
 		session.setAttribute("bno_history", set);
 		model.addAttribute("board", dto);
 		model.addAttribute("flist", flist);

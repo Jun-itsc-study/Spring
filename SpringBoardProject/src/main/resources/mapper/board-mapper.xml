@@ -81,7 +81,7 @@
 	<select id="selectImageFile" parameterType="int" resultType="String">
 		select path from board_image where bi_no = #{fno}
 	</select>
-	<select id="selectMaxRN" resultType="int">
+	<!-- <select id="selectMaxRN" resultType="int">
 		select max(rownum) from board
 	</select>
 	<select id="selectMinRN" resultType="int">
@@ -92,6 +92,12 @@
 	</select>
 	<select id="selectRownum" resultType="int" parameterType="int">
 		select rn from (select rownum rn, board.* from board order by bno desc) where bno=#{bno}
+	</select> -->
+	<select id="nextBoard" resultType="int" parameterType="int">
+		select next from (select nvl(lag(bno) over (order by bno desc),-1) as next, b.* from board b) where bno=#{bno}
+	</select>
+	<select id="prevBoard" resultType="int" parameterType="int">
+		select prev from (select nvl(lead(bno) over (order by bno desc),-1) as prev, b.* from board b) where bno=#{bno}
 	</select>
 </mapper> 
 
